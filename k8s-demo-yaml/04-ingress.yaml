@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+        name: nsx-demo
+spec:
+        rules:
+        - host: nsx-demo.k8s.internal
+          http:
+            paths:
+            - path: /*
+              backend:
+                serviceName: nsx-demo
+                servicePort: 8080
+
+       
+
