@@ -12,6 +12,9 @@ spec:
                                 app: nsx-demo
                                 secgroup: app-tier
                 spec:
+                        securityContext:
+                                runAsUser : 1000
+                                runAsGroup: 0
                         containers:
                                 - name: nsx-demo
                                   image: danpaul81/nsx-demo
