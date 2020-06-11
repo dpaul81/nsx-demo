@@ -2,12 +2,14 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
         name: nsx-demo
+        annotations:
+          ncp/use-regex: "true"
 spec:
         rules:
         - host: nsx-demo.corp.local
           http:
             paths:
-            - path: /
+            - path: /.*
               backend:
                 serviceName: nsx-demo
                 servicePort: 80
