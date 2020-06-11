@@ -9,7 +9,11 @@ spec:
         ingress:
         - from:
           - ipBlock:
-                  cidr: 100.64.176.12/31 
+                  # IP of LoadBalancer T1/T0 Router Uplink port. 
+                  # Find in NSX MGR
+                  # also sent as NCP Annotation for ingress
+                  # kubectl describe ingress nsx-demo -n[yournamespace]
+                  cidr: 100.64.224.3/31 
           ports:
           - protocol: TCP
             port: 80

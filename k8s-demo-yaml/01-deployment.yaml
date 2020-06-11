@@ -1,10 +1,13 @@
-apiVersion: v1
-kind: ReplicationController
+apiVersion: apps/v1
+kind: Deployment
 metadata:
         name: nsx-demo
         labels:
                 app: nsx-demo
 spec:
+        selector:
+          matchLabels:
+            app: nsx-demo
         replicas: 4
         template:
                 metadata:
@@ -12,13 +15,13 @@ spec:
                                 app: nsx-demo
                                 secgroup: app-tier
                 spec:
-                        securityContext:
-                                runAsUser : 1000
-                                runAsGroup: 0
+                        #securityContext:
+                        #       runAsUser : 1000
+                        #       runAsGroup: 0
                         containers:
                                 - name: nsx-demo
-                                  image: danpaul81/nsx-demo
-                                  imagePullPolicy: Always
+                                  image: yfauser/nsx-demo
+                                  imagePullPolicy: IfNotPresent
                                   ports:
-                                          - containerPort: 8080
+                                          - containerPort: 80
 

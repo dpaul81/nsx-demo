@@ -4,13 +4,13 @@ metadata:
         name: nsx-demo
 spec:
         rules:
-        - host: nsx-demo.k8s.internal
+        - host: nsx-demo.corp.local
           http:
             paths:
-            - path: /*
+            - path: /
               backend:
                 serviceName: nsx-demo
-                servicePort: 8080
+                servicePort: 80
 
        
 
