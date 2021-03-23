@@ -2,14 +2,24 @@
 # using regex to rewrite from frontend path /nsx-demo to backend path /
 # /scan url doesnt work here
 
+# generate ssl certificate using gencert.sh script
+# CN should be your host fqdn
+# kubectl create secret tls test-tls --key="tls.key" --cert="tls.crt"
+
 apiVersion:  networking.k8s.io/v1 
 kind: Ingress
 metadata:
         name: nsx-demo
         annotations:
           ncp/use-regex: "true"
+          ncp/http-redirect: "true"
           ingress.kubernetes.io/rewrite-target: /$2
+          kubernetes.io/ingress.allow-http: "false"
 spec:
+        tls:
+        - hosts:
+            - tanzudemo.app.corp.local
+          secretName: test-tls
         rules:
         - host: tanzudemo.app.corp.local
           http:
