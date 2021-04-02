@@ -4,6 +4,8 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"net"
+//	"errors"
 	"log"
 	"net/http"
 	"os"
@@ -82,15 +84,21 @@ func index() http.Handler {
 			http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
 			return
 		}
+		
 		hostname,err := os.Hostname()
 		if err != nil {
 			panic(err)
 		}
+		ipaddress, err := GetIPAddresses()
+		if err != nil {
+			panic(err)
+		}
+
 		reqtime := time.Now();
 		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 		w.Header().Set("X-Content-Type-Options", "nosniff")
 		w.WriteHeader(http.StatusOK)
-		fmt.Fprintln(w, "Hello, World! Served by:", hostname, "\n", reqtime)
+		fmt.Fprintln(w, "Hello, World!\nThis is",hostname,"\nMy network interface(s) / IP:\n",ipaddress,"\nLocal Time ", reqtime)
 
 	})
 }
@@ -133,3 +141,42 @@ func tracing(nextRequestID func() string) func(http.Handler) http.Handler {
 		})
 	}
 }
+
+func GetIPAddresses () (addr string, err error) {
+	var (
+        	ief      []net.Interface
+	        addrs    []net.Addr
+        	ipv4Addr net.IP
+		networkoutput string
+	)
+
+        ief,err = net.Interfaces()
+        if err != nil {
+                return;
+        }
+
+        for _, intf := range ief {
+                networkoutput += intf.Name
+                if addrs,err = intf.Addrs(); err != nil {
+                       break;
+                }
+                for _, addr := range addrs {
+                        if ipv4Addr = addr.(*net.IPNet).IP; ipv4Addr != nil {
+                                networkoutput += "\t"
+                                networkoutput += ipv4Addr.String()
+                                networkoutput += "\n"
+                        }
+                }
+                networkoutput += "\n"
+        }
+
+	return networkoutput,nil
+}
+
+
+
+
+
+
+
+
