@@ -1,12 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-        name: nsx-demo
+        name: svc-nsx-demo
         labels:
                 app: nsx-demo
 spec:
         ports:
                 - port: 80
+                  targetPort: 5000
         selector:
                 app: nsx-demo
         type: LoadBalancer
