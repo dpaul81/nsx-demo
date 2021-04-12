@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-        name: nsx-demo
+        name: ingress-nsx-demo
         annotations:
           ncp/use-regex: "true"
 spec:
@@ -11,7 +11,7 @@ spec:
             paths:
             - path: /.*
               backend:
-                serviceName: nsx-demo
+                serviceName: svc-nsx-demo
                 servicePort: 80
 
        
