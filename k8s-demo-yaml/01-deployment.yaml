@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-        name: nsx-demo
+        name: depl-nsx-demo
         labels:
                 app: nsx-demo
 spec:
@@ -20,8 +20,9 @@ spec:
                         #       runAsGroup: 0
                         containers:
                                 - name: nsx-demo
-                                  image: yfauser/nsx-demo
+                                  #image: yfauser/nsx-demo
+                                  image: danpaul81/nsx-demo
                                   imagePullPolicy: IfNotPresent
                                   ports:
-                                          - containerPort: 80
+                                          - containerPort: 5000
 
