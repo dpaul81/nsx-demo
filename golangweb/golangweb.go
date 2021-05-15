@@ -22,11 +22,13 @@ const (
 
 var (
 	listenAddr string
+	listenPort string
 	healthy    int32
 )
 
 func main() {
-	flag.StringVar(&listenAddr, "listen-addr", ":5000", "server listen address")
+	flag.StringVar(&listenAddr, "listen-addr", "", "server listen address")
+	flag.StringVar(&listenPort, "port","5000","server listen port")
 	flag.Parse()
 
 	logger := log.New(os.Stdout, "http: ", log.LstdFlags)
@@ -41,7 +43,7 @@ func main() {
 	}
 
 	server := &http.Server{
-		Addr:         listenAddr,
+		Addr:         listenAddr+ ": "+listenPort,
 		Handler:      tracing(nextRequestID)(logging(logger)(router)),
 		ErrorLog:     logger,
 		ReadTimeout:  5 * time.Second,
@@ -68,10 +70,10 @@ func main() {
 		close(done)
 	}()
 
-	logger.Println("Server is ready to handle requests at", listenAddr)
+	logger.Printf("Server is ready to handle requests at %v:%v", listenAddr,listenPort)
 	atomic.StoreInt32(&healthy, 1)
 	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-		logger.Fatalf("Could not listen on %s: %v\n", listenAddr, err)
+		logger.Fatalf("Could not listen on %s: %v:%v\n", listenAddr,listenPort, err)
 	}
 
 	<-done
