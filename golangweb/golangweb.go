@@ -43,7 +43,7 @@ func main() {
 	}
 
 	server := &http.Server{
-		Addr:         listenAddr+ ": "+listenPort,
+		Addr:         listenAddr+ ":"+listenPort,
 		Handler:      tracing(nextRequestID)(logging(logger)(router)),
 		ErrorLog:     logger,
 		ReadTimeout:  5 * time.Second,
