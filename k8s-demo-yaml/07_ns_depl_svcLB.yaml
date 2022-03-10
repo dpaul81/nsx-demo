@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ns-nsxdemo
+  labels:
+    app: nsxdemo
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+        name: depl-nsx-demo
+        namespace: ns-nsxdemo
+        labels:
+                app: nsx-demo
+spec:
+        selector:
+          matchLabels:
+            app: nsx-demo
+        replicas: 4
+        template:
+                metadata:
+                        labels:
+                                app: nsx-demo
+                                secgroup: app-tier
+                spec:
+                        containers:
+                                - name: nsx-demo
+                                  #image: yfauser/nsx-demo
+                                  image: danpaul81/nsx-demo
+                                  imagePullPolicy: IfNotPresent
+                                  ports:
+                                          - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+        name: svc-nsx-demo
+        namespace: ns-nsxdemo
+        labels:
+                app: nsx-demo
+spec:
+        ports:
+                - port: 80
+                  targetPort: 5000
+        selector:
+                app: nsx-demo
+        type: LoadBalancer
